@@ -1,0 +1,37 @@
+---
+domain: test
+descriptors:
+  - key: name
+    value: test
+    descriptors:
+    - key: age
+      value: 14
+      rate_limit:
+        unit: minute
+        requests_per_unit: 2
+    - key: age
+      value: 18
+      descriptors:
+      - key: sex
+        value: male
+        rate_limit:
+          unit: minute
+          requests_per_unit: 4
+
+# 越明细, 越优先
+# limit=.*时, 2/min
+# limit=.* && age=14时, 4/min
+  - key: limit
+    rate_limit:
+      unit: minute
+      requests_per_unit: 2
+    descriptors:
+      - key: age
+        value: 14
+        rate_limit:
+          unit: minute
+          requests_per_unit: 4
+  - key: foo
+    rate_limit:
+      unit: minute
+      requests_per_unit: 2

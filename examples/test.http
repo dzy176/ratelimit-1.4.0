@@ -1,0 +1,5 @@
+# curl http://192.168.168.3:6070/rlconfig
+GET http://192.168.168.3:6070/rlconfig
+
+###
+
