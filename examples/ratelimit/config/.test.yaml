@@ -1,0 +1,11 @@
+---
+domain: demo
+descriptors:
+  - key: name
+    value: test
+    descriptors:
+      - key: age
+        value: 14
+        rate_limit:
+          unit: minute
+          requests_per_unit: 2

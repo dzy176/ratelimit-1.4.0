@@ -9,14 +9,15 @@ type Settings struct {
 	// runtime options
 	GrpcUnaryInterceptor grpc.ServerOption
 	// env config
-	Port                       int    `envconfig:"PORT" default:"8080"`
-	GrpcPort                   int    `envconfig:"GRPC_PORT" default:"8081"`
-	DebugPort                  int    `envconfig:"DEBUG_PORT" default:"6070"`
-	UseStatsd                  bool   `envconfig:"USE_STATSD" default:"false"`
-	StatsdHost                 string `envconfig:"STATSD_HOST" default:"localhost"`
-	StatsdPort                 int    `envconfig:"STATSD_PORT" default:"8125"`
-	RuntimePath                string `envconfig:"RUNTIME_ROOT" default:"/root/GOMODULE/ratelimit-1.4.0/examples/ratelimit"`
-	RuntimeSubdirectory        string `envconfig:"RUNTIME_SUBDIRECTORY" default:"config"`
+	Port                int    `envconfig:"PORT" default:"8080"`
+	GrpcPort            int    `envconfig:"GRPC_PORT" default:"8081"`
+	DebugPort           int    `envconfig:"DEBUG_PORT" default:"6070"`
+	UseStatsd           bool   `envconfig:"USE_STATSD" default:"false"`
+	StatsdHost          string `envconfig:"STATSD_HOST" default:"localhost"`
+	StatsdPort          int    `envconfig:"STATSD_PORT" default:"8125"`
+	RuntimePath         string `envconfig:"RUNTIME_ROOT" default:"/root/GOMODULE/ratelimit-1.4.0/examples/ratelimit"`
+	RuntimeSubdirectory string `envconfig:"RUNTIME_SUBDIRECTORY" default:"config"`
+	// 忽略dot file, 那么examples中的 .test.yaml文件的限速配置将忽略
 	RuntimeIgnoreDotFiles      bool   `envconfig:"RUNTIME_IGNOREDOTFILES" default:"false"`
 	LogLevel                   string `envconfig:"LOG_LEVEL" default:"INFO"`
 	RedisSocketType            string `envconfig:"REDIS_SOCKET_TYPE" default:"unix"`

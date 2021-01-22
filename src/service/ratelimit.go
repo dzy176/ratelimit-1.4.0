@@ -49,12 +49,12 @@ type RateLimitServiceServer interface {
 }
 
 type service struct {
-	runtime            loader.IFace
+	runtime            loader.IFace // 加载配置文件
 	configLock         sync.RWMutex
-	configLoader       config.RateLimitConfigLoader
-	config             config.RateLimitConfig
-	runtimeUpdateEvent chan int
-	cache              redis.RateLimitCache
+	configLoader       config.RateLimitConfigLoader // 反序列化配置文件
+	config             config.RateLimitConfig       // dump配置; 依据是否命中, 获取相应配置
+	runtimeUpdateEvent chan int                     //　配置文件更新信号
+	cache              redis.RateLimitCache         // redis
 	stats              serviceStats
 	rlStatsScope       stats.Scope
 	legacy             *legacyService
@@ -76,9 +76,10 @@ func (this *service) reloadConfig() {
 	files := []config.RateLimitConfigToLoad{}
 	snapshot := this.runtime.Snapshot()
 	for _, key := range snapshot.Keys() {
-		if !strings.HasPrefix(key, "config.") {
-			continue
-		}
+		// 原文中config必须是config开头的, 不合理, 注释掉
+		//if !strings.HasPrefix(key, "config.") {
+		//	continue
+		//}
 
 		files = append(files, config.RateLimitConfigToLoad{key, snapshot.Get(key)})
 	}

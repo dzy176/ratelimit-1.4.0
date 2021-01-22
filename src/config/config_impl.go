@@ -31,7 +31,7 @@ type yamlRoot struct {
 
 type rateLimitDescriptor struct {
 	Descriptors map[string]*rateLimitDescriptor `json:"descriptors"`
-	Limit       *RateLimit `json:"limit"`
+	Limit       *RateLimit                      `json:"limit"`
 }
 
 type rateLimitDomain struct {
@@ -119,6 +119,7 @@ func (this *rateLimitDescriptor) loadDescriptors(
 		}
 
 		newParentKey := parentKey + finalKey
+		// 同一个数组中, 不应该出现key:value一样的数据
 		if _, present := this.Descriptors[finalKey]; present {
 			panic(newRateLimitConfigError(
 				config, fmt.Sprintf("duplicate descriptor composite key '%s'", newParentKey)))
@@ -221,6 +222,7 @@ func (this *rateLimitConfigImpl) loadConfig(config RateLimitConfigToLoad, statsS
 		panic(newRateLimitConfigError(config, "config file cannot have empty domain"))
 	}
 
+	// domain 唯一
 	if _, present := this.domains[root.Domain]; present {
 		panic(newRateLimitConfigError(
 			config, fmt.Sprintf("duplicate domain '%s' in config file", root.Domain)))

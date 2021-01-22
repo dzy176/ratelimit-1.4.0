@@ -110,6 +110,7 @@ func pipelineAppend(conn Connection, key string, hitsAddend uint32, expirationSe
 	conn.PipeAppend("EXPIRE", key, expirationSeconds)
 }
 
+// append时的 INCRBY, EXPRIRE两次命令, fetch时也应该调用pipResponse()方法
 func pipelineFetch(conn Connection) uint32 {
 	ret := uint32(conn.PipeResponse().Int())
 	// Pop off EXPIRE response and check for error.
@@ -229,10 +230,13 @@ func (this *rateLimitCacheImpl) DoLimit(
 			limitAfterIncrease = pipelineFetch(conn)
 		}
 
+		// 操作redis前
 		limitBeforeIncrease := limitAfterIncrease - hitsAddend
+		// 阈值
 		overLimitThreshold := limits[i].Limit.RequestsPerUnit
 		// The nearLimitThreshold is the number of requests that can be made before hitting the NearLimitRatio.
 		// We need to know it in both the OK and OVER_LIMIT scenarios.
+		// math.Floor: 四舍五入; nearLimitThreshold的作用暂时不太能理解
 		nearLimitThreshold := uint32(math.Floor(float64(float32(overLimitThreshold) * config.NearLimitRatio)))
 
 		logger.Debugf("cache key: %s current: %d", cacheKey.key, limitAfterIncrease)
